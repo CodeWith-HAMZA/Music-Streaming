@@ -20,30 +20,24 @@ const Sidebar = ({ children }) => {
       url: "/search",
     },
   ];
+  const props = { children };
   return (
     <div className="p-3">
       <div className="flex">
-        <div className="hidden md:flex md:gap-2 md:flex-col w-[300px] bg-neutral-900 h-screen">
-          <Box className="bg-slate-800">
+        {/* left side bar  */}
+        <div className="hidden sticky top-0 md:flex md:gap-2 md:flex-col w-[300px] bg-neutral-900 h-screen">
+          <Box className="bg-neutral-800">
             {routes.map((item, idx) => (
               <SideBarItem key={idx} {...item} />
             ))}
           </Box>
-          <Box className="bg-slate-800 h-full">
+          <Box className="bg-neutral-800 h-full">
             <SongLibrary />
           </Box>
         </div>
 
-        <div className="overflow-y-auto w-full bg-gray-900">
-          <main>{children}</main>
-          {/* <div className="max-w-lg mx-auto py-4 overflow-scroll h-screen">
-            <div className="bg-neutral-600 mb-4 p-4 h-[40rem]">
-              Song Library
-            </div>
-          </div> */}
-        </div>
-
-        {/* {children} */}
+        {/* Main-Content  */}
+        <div className="overflow-y-auto w-full bg-gray-900" {...props} />
       </div>
     </div>
   );

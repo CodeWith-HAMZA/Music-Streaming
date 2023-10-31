@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Figtree, Inter } from "next/font/google";
 import "./../globals.css";
 import Sidebar from "@/components/Sidebar";
+import { NextUiProvider, ReduxToolkitProvider } from "../providers";
+import MusicPlayer from "@/components/MusicPlayer/index";
 
 const inter = Figtree({ subsets: ["latin"] });
 
@@ -18,7 +20,14 @@ export default function SiteLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Sidebar>{children}</Sidebar>
+        <NextUiProvider>
+          <main className="dark text-foreground bg-background">
+            <ReduxToolkitProvider>
+              <Sidebar>{children}</Sidebar>
+            </ReduxToolkitProvider>
+            <MusicPlayer />
+          </main>
+        </NextUiProvider>
       </body>
     </html>
   );

@@ -63,7 +63,6 @@ const Header: React.FC<HeaderProps> = ({ className, children }) => {
       <div className="">
         <p className="text-xl p-4 font-bold">Let's Start Vibrating!</p>
       </div>
-      {children}
     </>
   );
 };
