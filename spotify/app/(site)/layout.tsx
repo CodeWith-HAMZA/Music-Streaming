@@ -22,9 +22,7 @@ export default function SiteLayout({
       <body className={inter.className}>
         <NextUiProvider>
           <main className="dark text-foreground bg-background">
-            <ReduxToolkitProvider>
-              <Sidebar>{children}</Sidebar>
-            </ReduxToolkitProvider>
+            <Sidebar>{children}</Sidebar>
             <MusicPlayer />
           </main>
         </NextUiProvider>

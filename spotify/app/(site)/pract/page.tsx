@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 const MusicPlayer = () => {
   const audioRef = useRef(null);
@@ -7,6 +7,7 @@ const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(1);
+  const [Duration, setDuration] = useState(0);
 
   const play = () => {
     audioRef.current.play();
@@ -48,7 +49,6 @@ const MusicPlayer = () => {
     console.log(audioRef.current.currentTime, "audio ref");
 
     setCurrentTime(time);
-
     audioRef.current.currentTime = time;
   };
 
@@ -57,6 +57,11 @@ const MusicPlayer = () => {
     setVolume(volumeValue);
     audioRef.current.volume = volumeValue;
   };
+
+  useEffect(() => {
+    setDuration(audioRef.current?.duration);
+  }, []);
+
   return (
     <div className="bg-gray-200 p-4 rounded-lg">
       <audio
@@ -97,22 +102,25 @@ const MusicPlayer = () => {
         </button>
       </div>
       <div className="relative mt-4">
-        <div className="h-1 hover:h-2  transition-all bg-gray-300 group rounded-full">
+        <div className="h-1 hover:h-2 transition-all bg-gray-300 group rounded-full">
           <div
-            className="h-full bg-green-500   rounded-full"
+            className="h-full bg-green-500 rounded-full"
             style={{
-              width: `${(currentTime / audioRef.current.duration) * 100}%`,
+              width: `${(currentTime / audioRef.current?.duration) * 100}%`,
             }}
           />
           <input
             type="range"
             min={0}
-            max={audioRef.current ? audioRef.current.duration : 0}
+            max={audioRef.current ? audioRef.current?.duration : 0}
             value={currentTime}
             onChange={handleSeek}
-            className="absolute bg-red-500 top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+            className="absolute bg-red-500 top-0 left-0 w-full h-full opacity-60 cursor-pointer"
           />
         </div>
+      </div>
+      <div className="text-black">
+        {parseInt(currentTime)},{Duration}{" "}
       </div>
       <input
         type="range"

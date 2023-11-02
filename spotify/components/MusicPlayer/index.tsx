@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Card, CardBody, Image, Button, Progress } from "@nextui-org/react";
 import { HeartIcon } from "./HeartIcon";
 import { PauseCircleIcon } from "./PauseCircleIcon";
@@ -7,24 +7,97 @@ import { NextIcon } from "./NextIcon";
 import { PreviousIcon } from "./PreviousIcon";
 import { RepeatOneIcon } from "./RepeatOneIcon";
 import { ShuffleIcon } from "./ShuffleIcon";
+import useMusicPlayerStore from "@/store/useMusicPlayerStore";
+import { AiFillPauseCircle, AiFillPlayCircle } from "react-icons/ai";
+import { convertSecondsToMinutes } from "@/utils/helpers";
+import { TbMusic } from "react-icons/tb";
 
 export default function MusicPlayer() {
+  const {
+    isPlaying,
+    currentSong,
+    currentTime,
+    playlist,
+    play,
+    pause,
+    forward,
+    backward,
+    setCurrentSong,
+    setCurrentTime,
+  } = useMusicPlayerStore();
   const [liked, setLiked] = React.useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const handlePlay = () => {
+    if (isPlaying) {
+      pause();
+      audioRef.current?.pause();
+    } else {
+      play();
+      audioRef.current?.play();
+    }
+    console.log(currentSong);
+  };
+  const handleForward = () => {
+    forward();
+  };
+  const handleBackward = () => {
+    backward();
+  };
+  const handleShuffle = () => {
+    backward();
+  };
+  const handleRepeat = () => {
+    backward();
+  };
+
+  function handleTimeUpdate(e: React.SyntheticEvent<HTMLAudioElement, Event>) {
+    setCurrentTime(e.currentTarget.currentTime);
+  }
+
+  useEffect(() => {
+    setCurrentSong("u.mp3");
+  }, []);
+
+  const handleSeek = (e: ChangeEvent<HTMLInputElement>) => {
+    const time = parseFloat(e.target.value);
+    console.log(time);
+
+    if (audioRef.current) {
+      audioRef.current.currentTime = time;
+      setCurrentTime(time);
+    }
+  };
 
   return (
     <Card
       isBlurred
-      className="fixed z-30 px-10 left-0 w-full bottom-0 bg-green-800/80  dark:bg-teal-900/40"
+      className="fixed z-30 px-10 left-0 w-full bottom-0
+       
+       "
       shadow="sm"
     >
+      <audio
+        id="musicPlayer"
+        ref={audioRef}
+        src={"/12.mp3"}
+        className="border-2"
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleForward}
+      />
       <CardBody>
         <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 items-center justify-center">
           <div className="relative hidden md:block col-span-6 md:col-span-4 hover:opacity-80 cursor-pointer transition-all">
             <Image
               alt="Album cover"
-              className="object-cover w-32 "
+              className={`object-cover w-32 ${isPlaying && "animate-pulse"}`}
               shadow="md"
               src="/m.jpg"
+            />
+            <TbMusic
+              size={45}
+              className={`bg-green-500 transition-all opacity-0 rounded-full p-2.5 ${
+                isPlaying && "animate-bounce opacity-0"
+              }`}
             />
           </div>
 
@@ -53,16 +126,28 @@ export default function MusicPlayer() {
               <Progress
                 aria-label="Music progress"
                 classNames={{
-                  indicator: "bg-default-800 dark:bg-white",
-                  track: "bg-default-500/30",
+                  indicator: "bg-blue-800 dark:bg-white ",
+                  track: "bg-default-500/40",
                 }}
-                color="default"
                 size="sm"
-                value={50}
+                value={(currentTime / audioRef.current?.duration) * 100}
+              />
+              <input
+                type="range"
+                name="seekAudio"
+                className="relative -top-3.5 opacity-0 cursor-pointer"
+                id="seekAudioInput"
+                max={audioRef.current ? audioRef.current?.duration : 0}
+                value={currentTime}
+                onChange={handleSeek}
               />
               <div className="flex justify-between">
-                <p className="text-small">1:23</p>
-                <p className="text-small text-foreground/50">4:32</p>
+                <p className="text-medium">
+                  {convertSecondsToMinutes(currentTime)}
+                </p>
+                <p className="text-medium text-foreground/70">
+                  {convertSecondsToMinutes(Number(audioRef.current?.duration))}
+                </p>
               </div>
             </div>
 
@@ -72,6 +157,7 @@ export default function MusicPlayer() {
                 className="data-[hover]:bg-foreground/10"
                 radius="full"
                 variant="light"
+                onClick={handleRepeat}
               >
                 <RepeatOneIcon className="text-foreground/80" />
               </Button>
@@ -80,6 +166,7 @@ export default function MusicPlayer() {
                 className="data-[hover]:bg-foreground/10"
                 radius="full"
                 variant="light"
+                onClick={handleBackward}
               >
                 <PreviousIcon />
               </Button>
@@ -88,14 +175,20 @@ export default function MusicPlayer() {
                 className="w-auto h-auto data-[hover]:bg-foreground/10"
                 radius="full"
                 variant="light"
+                onClick={handlePlay}
               >
-                <PauseCircleIcon size={60} />
+                {isPlaying ? (
+                  <AiFillPauseCircle size={60} />
+                ) : (
+                  <AiFillPlayCircle size={60} />
+                )}
               </Button>
               <Button
                 isIconOnly
                 className="data-[hover]:bg-foreground/10"
                 radius="full"
                 variant="light"
+                onClick={handleForward}
               >
                 <NextIcon />
               </Button>
@@ -104,6 +197,7 @@ export default function MusicPlayer() {
                 className="data-[hover]:bg-foreground/10"
                 radius="full"
                 variant="light"
+                onClick={handleShuffle}
               >
                 <ShuffleIcon className="text-foreground/80" />
               </Button>
