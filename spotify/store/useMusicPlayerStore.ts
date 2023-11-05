@@ -8,6 +8,7 @@ const initialState: MusicPlayerState = {
   playlist: [],
   progress: 0,
   currentTime: 0,
+  volume: 0.3,
 };
 export type MusicPlayerStore = MusicPlayerState & MusicPlayerActions;
 
@@ -17,6 +18,8 @@ const useMusicPlayerStore = create<MusicPlayerStore>((set) => ({
   pause: () => set({ isPlaying: false }),
   setProgress: (progress) => set({ progress }),
   setCurrentSong: (givenSong) => set({ currentSong: givenSong }),
+  setVolume: (volume) => set({ volume }), // Set the volume level
+
   addToPlaylist: (givenSong) =>
     set((state) => ({ playlist: [...state.playlist, givenSong] })),
   clearPlaylist: () => set({ playlist: [] }),

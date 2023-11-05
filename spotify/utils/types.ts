@@ -6,6 +6,7 @@ export interface MusicPlayerState {
   playlist: string[] | object[];
   progress: number;
   currentTime: number;
+  volume: number;
 }
 export interface MusicPlayerActions {
   play: () => void;
@@ -18,6 +19,7 @@ export interface MusicPlayerActions {
   forward: () => void;
   backward: () => void;
   setPlaylist: (playlist: string[]) => void;
+  setVolume: (volume: number) => void; // Set the volume level
 }
 export interface Song {
   author: string | null;

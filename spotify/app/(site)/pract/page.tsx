@@ -1,4 +1,6 @@
 "use client";
+
+import supabaseClient from "@/supabase";
 import React, { useState, useRef, useEffect } from "react";
 
 const MusicPlayer = () => {
@@ -58,7 +60,12 @@ const MusicPlayer = () => {
     audioRef.current.volume = volumeValue;
   };
 
+  async function getWah() {
+    const { data } = await await supabaseClient.from("Wah").select("*");
+    console.log(data);
+  }
   useEffect(() => {
+    getWah().then((res) => res);
     setDuration(audioRef.current?.duration);
   }, []);
 
