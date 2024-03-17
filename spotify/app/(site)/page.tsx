@@ -1,4 +1,5 @@
 "use client";
+import { ID, account, databases, getUser } from "@/appwrite";
 import Box from "@/components/Box";
 import Header from "@/components/Header";
 import SongCard from "@/components/cards/SongCard";
@@ -34,14 +35,26 @@ export default function Home() {
   );
 
   return (
-    <Box className="px-3 overflow-y-auto">
-      <Header
-        className={`flex justify-between bg-gradient-to-b rounded-lg from-teal-800 p-2 to-neutral-900 h-[4rem]`}
-      />
+    <>
+      <button
+        onClick={async () => {
+          const songs = await databases.listDocuments(
+            "65eb368805097fdd4540",
+            "65eb36d94a3584eac3f3"
+          );
+          console.log(songs);
+        }}
+      >
+        shaddu
+      </button>
+      <div className="">
+        <p className="text-xl p-4 font-bold"> Let`s Start Vibrating!</p>
+      </div>
       <div
         className="
           grid 
           grid-cols-1 
+          sm:grid-cols-2
           md:grid-cols-3 
           xl:grid-cols-4 
           2xl:grid-cols-5 gap-3 overflow-y-auto"
@@ -58,6 +71,6 @@ export default function Home() {
           />
         ))}
       </div>
-    </Box>
+    </>
   );
 }

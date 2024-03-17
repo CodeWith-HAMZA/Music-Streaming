@@ -1,9 +1,11 @@
 "use client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { ReactNode } from "react";
 import { AiFillHome, AiOutlineSearch } from "react-icons/ai";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
+import AuthProfile from "./AuthProfile";
 
 interface HeaderProps {
   className?: string;
@@ -32,9 +34,9 @@ const Header: React.FC<HeaderProps> = ({ className, children }) => {
             />
           </button>
         </div>
-        <div className="flex justify-between gap-8">
+        <div className="flex w-full sm:w-auto justify-between gap-8">
           {/* home-search  */}
-          <div className="md:hidden  flex gap-2">
+          <div className="md:hidden flex gap-2">
             <button>
               <AiFillHome
                 className="text-black bg-white p-1 rounded-full hover:opacity-80 transition-all"
@@ -48,20 +50,8 @@ const Header: React.FC<HeaderProps> = ({ className, children }) => {
               />
             </button>
           </div>
-
-          {/* Sign-up/in  */}
-          <div className="flex items-center gap-5">
-            <button className="text-sm text-neutral-300 hover:text-neutral-100 transition-all">
-              Sign Up
-            </button>
-            <button className="px-4 py-2 font-bold hover:opacity-75 transition-all text-sm bg-white rounded-full text-black">
-              Login
-            </button>
-          </div>
+          <AuthProfile />
         </div>
-      </div>
-      <div className="">
-        <p className="text-xl p-4 font-bold">Let's Start Vibrating!</p>
       </div>
     </>
   );

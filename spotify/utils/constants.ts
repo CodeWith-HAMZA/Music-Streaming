@@ -1,0 +1,46 @@
+export const genres = [
+    "Pop",
+    "Rock",
+    "Hip Hop",
+    "R&B",
+    "Country",
+    "Electronic",
+    "Jazz",
+    "Reggae",
+    "Blues",
+    "Folk",
+    "Classical",
+    "Indie",
+    "Metal",
+    "Punk",
+    "Alternative",
+    "Soul",
+    "Funk",
+    "EDM",
+    "Disco",
+    "Gospel"
+  ];
+  
+  export const countries = [
+    "China",
+    "India",
+    "United States",
+    "Indonesia",
+    "Pakistan",
+    "Brazil",
+    "Nigeria",
+    "Bangladesh",
+    "Russia",
+    "Mexico",
+    "Japan",
+    "Ethiopia",
+    "Philippines",
+    "Egypt",
+    "Vietnam",
+    "DR Congo",
+    "Turkey",
+    "Iran",
+    "Germany",
+    "Thailand"
+  ];
+  

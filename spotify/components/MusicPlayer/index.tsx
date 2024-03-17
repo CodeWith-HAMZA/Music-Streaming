@@ -76,13 +76,15 @@ export default function MusicPlayer() {
     }
   };
 
-  let progressBarPercentage = (currentTime / audioRef.current?.duration) * 100,
+  let progressBarPercentage =
+      audioRef.current && (currentTime / audioRef.current?.duration) * 100,
     volumePercentage = Math.round(volume * 100);
+
   return (
     <div className="">
       <Card
         isBlurred
-        className="fixed z-30 left-0 ml-8 w-[98%] bottom-0 "
+        className="fixed z-30 left-0 w-full bottom-0 "
         shadow="sm"
       >
         <audio
@@ -93,9 +95,9 @@ export default function MusicPlayer() {
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleForward}
         />
-        <CardBody className="bg-teal-800/40">
+        <CardBody className="bg-neutral-900">
           <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 items-center justify-center">
-            <div className="relative hidden md:block col-span-6 md:col-span-4 hover:opacity-80 cursor-pointer transition-all">
+            <div className="relative hidden min-h-[23vh] md:block col-span-6 md:col-span-4 hover:opacity-80 cursor-pointer transition-all">
               <Image
                 alt="Album cover"
                 className={`object-cover w-32 ${isPlaying && "animate-pulse"}`}
@@ -180,7 +182,7 @@ export default function MusicPlayer() {
                 <span className="text-xs ml-1">{volumePercentage}%</span>
               </div>
 
-              <div className="flex w-full items-center justify-center">
+              <div className="flex w-full h-0 items-center justify-center">
                 <Button
                   isIconOnly
                   className="data-[hover]:bg-foreground/10"
