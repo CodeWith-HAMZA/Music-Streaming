@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [r]);
+  }, [r, pathname]);
 
   return (
     <AuthContext.Provider value={{ user, loading, error }}>
