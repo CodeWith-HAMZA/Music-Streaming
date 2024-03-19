@@ -1,13 +1,10 @@
 "use client";
 import { ID, account, databases, getUser } from "@/appwrite";
-import Box from "@/components/Box";
-import Header from "@/components/Header";
 import SongCard from "@/components/cards/SongCard";
 import { Theme } from "@/utils/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { AiFillHome, AiFillPlayCircle, AiOutlineSearch } from "react-icons/ai";
-import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
+import { AiFillPlayCircle } from "react-icons/ai";
 const songCardData = Array.from({ length: 10 }, (_, index) => ({
   id: index,
   title: "Frontend Radio",
@@ -40,7 +37,8 @@ export default function Home() {
         onClick={async () => {
           const songs = await databases.listDocuments(
             "65eb368805097fdd4540",
-            "65eb36d94a3584eac3f3"
+            "65eb36d94a3584eac3f3",
+            []
           );
           console.log(songs);
         }}

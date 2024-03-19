@@ -34,7 +34,10 @@ export async function registerUser(email: string, password: string) {
   return await loginUser(email, password);
 }
 
-// * app-write ids
+// * app-write required ids
 export const BUCKET_ID = "65edadcd999415a83476";
+export const SONGS_ID = "65eb36d94a3584eac3f3";
 export const USERS_ID = "65eb36a509f06d1784c7";
 export const DATABASE_ID = "65eb368805097fdd4540";
+export const PLAYLISTS_ID = "65eb36e3519440ec648b";
+export const ALBUMS_ID = "65eb36e6f3f45884fbf2";

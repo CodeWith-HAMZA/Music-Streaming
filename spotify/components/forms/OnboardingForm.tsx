@@ -116,7 +116,7 @@ export default function OnboardingForm({ emails }: { emails: string[] }) {
     setBusy(false);
     console.log(createdUser);
 
-    // location.href = "/";
+    location.href = "/";
   };
 
   return (

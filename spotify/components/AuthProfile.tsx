@@ -44,7 +44,7 @@ export default function AuthProfile() {
           variant={"faded"}
         >
           <DropdownItem key="new">
-            <Link href={"/user/profile/me"}>Your Profile</Link>
+            <Link href={"/profile/me"}>Your Profile</Link>
           </DropdownItem>
           <DropdownItem key="copy">Copy link</DropdownItem>
           <DropdownItem key="edit">Edit file</DropdownItem>
