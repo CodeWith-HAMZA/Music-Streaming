@@ -8,22 +8,38 @@ import {
   RadioGroup,
   Radio,
   User,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+  Spinner,
 } from "@nextui-org/react";
 
 import { useAuth } from "@/app/context/AuthContext";
 import Link from "next/link";
-import React from "react";
-import { AiFillHome, AiOutlineSearch } from "react-icons/ai";
+import React, { useState } from "react";
+import { AiFillHome, AiFillRightSquare, AiOutlineSearch } from "react-icons/ai";
 import { logoutUser } from "@/appwrite";
+import { FaUserCircle } from "react-icons/fa";
+import { MdMusicNote } from "react-icons/md";
+import { TbArrowRightBar, TbMusic, TbMusicCode } from "react-icons/tb";
+import { useRouter } from "next/navigation";
+import { users } from "@/appwrite/user.service";
 
 export default function AuthProfile() {
   const [selectedColor, setSelectedColor] = React.useState("default");
+  const r = useRouter();
 
-  const { error, loading, user } = useAuth();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { error, loading, user, onboardedUser } = useAuth();
+  const [Busy, setBusy] = useState(false);
   const variants = ["solid", "bordered", "light", "flat", "faded", "shadow"];
 
   if (loading || user) {
-    const DropdownContent = () => (
+    const dropDownContent = (
       <Dropdown>
         <DropdownTrigger>
           {!loading ? (
@@ -46,6 +62,18 @@ export default function AuthProfile() {
           <DropdownItem key="new">
             <Link href={"/profile/me"}>Your Profile</Link>
           </DropdownItem>
+
+          {true && (
+            <DropdownItem
+              onClick={() => {
+                console.log("open dialog");
+                onOpen();
+              }}
+              key="copy"
+            >
+              Be An Artist
+            </DropdownItem>
+          )}
           <DropdownItem key="copy">Copy link</DropdownItem>
           <DropdownItem key="edit">Edit file</DropdownItem>
           <DropdownItem
@@ -62,7 +90,56 @@ export default function AuthProfile() {
 
     return (
       <div className="flex flex-wrap gap-4">
-        <DropdownContent />
+        {dropDownContent}
+        <Modal backdrop={"blur"} isOpen={isOpen} onClose={onClose}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  <div className="flex gap-2 items-center">
+                    <MdMusicNote size={20} />
+                    <span>Upload Songs And Do Much More</span>
+                  </div>
+                </ModalHeader>
+                <ModalBody>
+                  <Button
+                    disabled={Busy}
+                    onClick={async () => {
+                      setBusy(true);
+                      const res = await users.editUserById(onboardedUser?.$id, {
+                        isArtist: true,
+                      });
+                      setBusy(false);
+                      console.log(onboardedUser);
+                    }}
+                    variant="faded"
+                    style={{ background: "green", color: "white" }}
+                  >
+                    <span>Be An Artist</span>
+                    {Busy ? (
+                      <Spinner color="white" size="sm" />
+                    ) : (
+                      <TbMusicCode className="rounded-full" size={18} />
+                    )}
+                  </Button>
+                </ModalBody>
+
+                <ModalFooter>
+                  {/* <Button
+                        color="default"
+                        variant="bordered"
+                        onPress={onClose}
+                      >
+                        Close
+                      </Button> */}
+                  {/* <Button color="primary" onPress={onClose}>
+                        Action
+                      </Button> */}
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
     );
   }

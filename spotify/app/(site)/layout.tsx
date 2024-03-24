@@ -30,11 +30,10 @@ export default async function SiteLayout({
           <NextUiProvider>
             <main className="dark text-foreground bg-[#1F1F1F]">
               <Sidebar>
-                <Box className="px-3 overflow-y-auto">
+                <Box className="px-3 overflow-y-auto ">
                   <Header
                     className={`flex justify-between bg-gradient-to-b rounded-lg from-teal-800 p-2 to-neutral-900 h-[4rem]`}
                   />
-
                   {children}
                 </Box>
               </Sidebar>

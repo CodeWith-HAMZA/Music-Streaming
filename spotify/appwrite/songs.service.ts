@@ -1,20 +1,25 @@
 import { asyncErrorHandler } from "@/utils/helpers";
 import { DATABASE_ID, SONGS_ID, databases } from ".";
 import { ID, Models } from "appwrite";
+import { Song } from "@/utils/types";
+import { revalidatePath } from "next/cache";
 
 class Songs {
   constructor() {}
 
   async getSongs() {
-    const songs = await databases.listDocuments(DATABASE_ID, SONGS_ID);
-    return songs;
+    const { documents }: { documents: Song[] } = await databases.listDocuments(
+      DATABASE_ID,
+      SONGS_ID
+    );
+    return documents as Song[];
   }
-  async createSong() {
+  async createSong(songData: Song, path: string) {
     const songs = await databases.createDocument(
       DATABASE_ID,
       SONGS_ID,
       ID.unique(),
-      {}
+      songData
     );
     return songs;
   }

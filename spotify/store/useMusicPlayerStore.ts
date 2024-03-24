@@ -5,6 +5,7 @@ import { create } from "zustand";
 const initialState: MusicPlayerState = {
   isPlaying: false,
   currentSong: null,
+
   playlist: [],
   progress: 0,
   currentTime: 0,

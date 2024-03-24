@@ -12,15 +12,17 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { TbEdit } from "react-icons/tb";
 import { useRouter } from "next/navigation";
 import { Query } from "appwrite";
+import EditProfileForm from "../edit/page";
 
 export default function Me() {
   const { user, loading } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [users, setUsers] = React.useState<any[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
+
   const r = useRouter();
 
   React.useEffect(() => {
@@ -83,25 +85,11 @@ export default function Me() {
                       <Button
                         variant="bordered"
                         style={{ background: "green", color: "white" }}
-                        onClick={() => {
-                          r.push("/onboarding");
-                        }}
                       >
                         Please Complete Your Profile <FaUserCircle size={20} />
                       </Button>
                     </ModalBody>
-                    <ModalFooter>
-                      {/* <Button
-                        color="default"
-                        variant="bordered"
-                        onPress={onClose}
-                      >
-                        Close
-                      </Button> */}
-                      {/* <Button color="primary" onPress={onClose}>
-                        Action
-                      </Button> */}
-                    </ModalFooter>
+ 
                   </>
                 )}
               </ModalContent>

@@ -30,13 +30,13 @@ export default function MusicPlayer() {
   const [liked, setLiked] = React.useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const handlePlay = () => {
+  const handlePlay = async () => {
     if (isPlaying) {
       pause();
-      audioRef.current?.pause();
+      await audioRef.current?.pause();
     } else {
       play();
-      audioRef.current?.play();
+      await audioRef.current?.play();
     }
     console.log(currentSong);
   };
@@ -62,9 +62,9 @@ export default function MusicPlayer() {
     audioRef.current.volume = volumeValue;
   };
 
-  useEffect(() => {
-    setCurrentSong("u.mp3");
-  }, []);
+  // useEffect(() => {
+  //   setCurrentSong("/12.mp3");
+  // }, [setCurrentSong]);
 
   const handleSeek = (e: ChangeEvent<HTMLInputElement>) => {
     const time = parseFloat(e.target.value);
@@ -80,6 +80,10 @@ export default function MusicPlayer() {
       audioRef.current && (currentTime / audioRef.current?.duration) * 100,
     volumePercentage = Math.round(volume * 100);
 
+  useEffect(() => {
+    console.log("song change hua ", currentSong);
+  }, [currentSong, setCurrentSong]);
+
   return (
     <div className="">
       <Card
@@ -90,7 +94,7 @@ export default function MusicPlayer() {
         <audio
           id="musicPlayer"
           ref={audioRef}
-          src={"/12.mp3"}
+          src={currentSong?.toString() || ""}
           className="border-2"
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleForward}
@@ -162,7 +166,7 @@ export default function MusicPlayer() {
                   </p>
                   <p className="text-medium text-foreground/70">
                     {convertSecondsToMinutes(
-                      Number(audioRef.current?.duration)
+                      Number(audioRef.current?.duration ?? 0)
                     )}
                   </p>
                 </div>

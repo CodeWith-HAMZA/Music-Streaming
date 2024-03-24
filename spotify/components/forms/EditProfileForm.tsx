@@ -18,18 +18,18 @@ import { notFound, useRouter } from "next/navigation";
 import React, { useEffect, useId, useLayoutEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiFillProfile } from "react-icons/ai";
-import { MdKeyboardArrowRight } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
+import { MdCheck, MdKeyboardArrowRight } from "react-icons/md";
 import { toast } from "sonner";
 interface UserOnboarding {
   bio: string;
-  country: string;
   day: string;
   displayName: string;
   genre: string;
   userName: string;
 }
 
-export default function OnboardingForm({ emails }: { emails: string[] }) {
+export default function EditProfileForm({ emails }: { emails: string[] }) {
   const r = useRouter();
   const { user, error, loading } = useAuth();
   const [selectedImage, setSelectedImage] = useState({
@@ -44,45 +44,13 @@ export default function OnboardingForm({ emails }: { emails: string[] }) {
 
   const [Busy, setBusy] = useState(false);
 
-  useEffect(() => {
-    const isUserAlreadyOnborded = emails.find((email) => email === user?.email);
-    console.log(user, emails);
-
-    if (isUserAlreadyOnborded) {
-      notFound();
-    }
-  }, [r, emails, user]);
-
-  // Function to handle image selection
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const imageFile = event?.target?.files[0];
-    setSelectedImage({
-      url: URL.createObjectURL(imageFile),
-      file: imageFile,
-    });
-  };
-
   const onSubmit = async (data: UserOnboarding) => {
-    const { bio, country, day, displayName, genre, userName } = data;
+    const { bio, day, displayName, genre, userName } = data;
 
-    if (!selectedImage?.file || !selectedImage?.url) {
-      toast.error("Please select your profile image");
-      return;
-    }
     // Handle form submission logic here
-    console.log(bio, displayName, day, userName, country, genre);
-    const formData = {
-      displayName,
-      userName,
-      bio,
-      day,
-      country,
-      genre: genre.split(","),
-      day,
-    };
+    console.log(bio, displayName, day, userName, genre);
 
     setBusy(true);
-
     const profileUrl = await uploadImage(selectedImage?.file);
     console.log(profileUrl);
     const createdUser = await asyncErrorHandler(
@@ -91,7 +59,7 @@ export default function OnboardingForm({ emails }: { emails: string[] }) {
           userName: userName,
           email: user?.email,
           profile: profileUrl,
-          country,
+
           bio: bio,
           genres: genre.split(","),
           dob: day,
@@ -106,38 +74,12 @@ export default function OnboardingForm({ emails }: { emails: string[] }) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-[#121212] py-12">
-      <div className="w-full max-w-2xl rounded-lg bg-[#181818] p-8">
-        <h1 className="font-bold text-5xl mb-2">Onboarding</h1>
-        <h1 className="mb-1 text-3xl font-bold text-white">
-          Complete Your <span className="text-green-500">Spotify</span> Profile
-        </h1>
-        <p className="mb-8 text-md font-semibold text-neutral-400">
-          Hi!{" "}
-          <span className="font-bold">
-            {`"`}
-            {user?.email}
-            {`"`}
-          </span>
-          , kindly Help Us To Complete Your Profile
-        </p>
+    <div className="flex flex-col items-center  py-12">
+      <div className="w-full max-w-2xl h-[44vh] rounded-lg bg-[#181818] p-8">
+        <h1 className="font-bold text-5xl mb-2">Edit Info</h1>
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-6 grid gap-6">
-            <input
-              className="hidden"
-              type="file"
-              id="profile"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-            <label htmlFor="profile" className="flex justify-center">
-              <img
-                src={selectedImage.url || "/profile-image-placeholder.jpg"}
-                alt="Selected"
-                className="rounded-full w-40 h-40 hover:opacity-70"
-              />
-            </label>
-
             <div>
               <label
                 className="mb-1 block text-sm font-medium text-gray-300"
@@ -237,26 +179,7 @@ export default function OnboardingForm({ emails }: { emails: string[] }) {
 
               {errors?.day && <ErrorMessage message={errors?.day.message} />}
             </div>
-            <div>
-              <label
-                className="mb-1 block text-sm font-medium text-gray-300"
-                htmlFor="country"
-              >
-                Country or Region
-              </label>
-              <Select
-                id="country"
-                {...register("country", { required: "Select The Country" })}
-                label="Select Country or Region"
-              >
-                {countries.map((_) => (
-                  <SelectItem key={_}>{_}</SelectItem>
-                ))}
-              </Select>
-              {errors?.country && (
-                <ErrorMessage message={errors?.country.message} />
-              )}{" "}
-            </div>
+
             <div>
               <label
                 className="mb-1 block text-sm font-medium text-gray-300"
@@ -265,7 +188,7 @@ export default function OnboardingForm({ emails }: { emails: string[] }) {
                 Favorite Genre
               </label>
               <Select
-                id="country"
+                id="genres"
                 {...register("genre", {
                   required: "Select Your Favourite genres",
                 })}
@@ -289,10 +212,11 @@ export default function OnboardingForm({ emails }: { emails: string[] }) {
             <Button
               type="submit"
               color="success"
-              className="hover:bg-opacity-70"
+              size={"lg"}
+              className="w-1/3 transition-all hover:bg-opacity-70"
             >
-              <span>Proceed</span>
-              {!Busy && <MdKeyboardArrowRight size={21} />}
+              <span>Edit</span>
+              {!Busy && <MdCheck size={21} />}
               {Busy && <Spinner size={"sm"} />}
             </Button>
           </div>
